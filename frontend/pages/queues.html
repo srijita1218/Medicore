@@ -4,60 +4,106 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Queues - Medicore</title>
 
-    <link rel="stylesheet" href="../css/style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"
+        href="../css/style.css">
 
 </head>
+
 
 <body>
 
 <div class="wrap">
 
-    <div class="topbar">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="topbar">
 
         <div>
 
-            <div class="title">
-                Queue Policies
+            <div class="brand">
+                MEDICORE
             </div>
 
             <div class="subtitle">
-                Scheduling policy used by each queue
+                Adaptive Multilevel Queue CPU Scheduling
             </div>
 
         </div>
 
-        <div class="status-pill">
-            AMQ
+        <div class="top-status">
+            CPU SCHEDULER
         </div>
 
-    </div>
+    </header>
 
+
+    <!-- =====================================================
+         NAVIGATION
+         ===================================================== -->
 
     <nav class="main-nav">
 
-        <a href="../index.html" data-page>Dashboard</a>
-        <a href="scheduler.html" data-page>Scheduler</a>
-        <a href="processes.html" data-page>Processes</a>
-        <a href="queues.html" data-page>Queues</a>
-        <a href="metrics.html" data-page>Metrics</a>
-        <a href="experiments.html" data-page>Experiments</a>
+        <a href="../index.html" data-page>
+            Dashboard
+        </a>
+
+        <a href="scheduler.html" data-page>
+            Scheduler
+        </a>
+
+        <a href="processes.html" data-page>
+            Processes
+        </a>
+
+        <a href="queues.html" data-page>
+            Queues
+        </a>
+
+        <a href="metrics.html" data-page>
+            Metrics
+        </a>
+
+        <a href="experiments.html" data-page>
+            Experiments
+        </a>
 
     </nav>
 
 
-    <!-- QUEUE CARDS -->
+    <!-- =====================================================
+         INTRO
+         ===================================================== -->
 
-    <div class="dashboard-grid">
+    <section class="panel">
+
+        <h1>SCHEDULER QUEUES</h1>
+
+        <p class="dashboard-description">
+
+            Adaptive Multilevel Queue structure used by
+            the Medicore CPU scheduler.
+
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUEUE CARDS
+         ===================================================== -->
+
+    <section class="dashboard-grid">
 
 
         <!-- EMERGENCY -->
@@ -69,12 +115,12 @@
             </div>
 
             <h2>
-                Emergency
+                EMERGENCY
             </h2>
 
             <p>
-                Critical tasks are scheduled before lower-priority
-                workloads and can immediately preempt the running process.
+                Critical hospital events requiring
+                immediate CPU attention.
             </p>
 
             <div class="queue-policy">
@@ -93,16 +139,16 @@
             </div>
 
             <h2>
-                Interactive
+                INTERACTIVE
             </h2>
 
             <p>
-                Interactive workloads share CPU time using a fixed
-                Round Robin quantum.
+                Interactive clinical applications such as
+                dashboards and EMR lookups.
             </p>
 
             <div class="queue-policy">
-                ROUND ROBIN · 4 TICKS
+                ROUND ROBIN · Q=4
             </div>
 
         </div>
@@ -117,79 +163,102 @@
             </div>
 
             <h2>
-                Background
+                BACKGROUND
             </h2>
 
             <p>
-                Background work uses FCFS and executes when higher
-                priority queues are clear.
+                Non-urgent workloads including billing,
+                backups and reports.
             </p>
 
             <div class="queue-policy">
-                FCFS
+                FCFS · AGING PROMOTION
             </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- PROCESSES CURRENTLY ASSIGNED TO EACH QUEUE -->
-
-    <section class="panel">
-
-        <h2>
-            QUEUE WORKLOAD
-        </h2>
-
-        <p class="dashboard-description">
-            Processes from the hospital workload are classified into
-            one of the three scheduling queues.
-        </p>
-
-
-        <!-- Q0 -->
-
-        <div class="queue-section">
-
-            <h3 style="color: var(--emergency);">
-                Q0 — EMERGENCY
-            </h3>
-
-            <div id="emergencyProcesses"></div>
-
-        </div>
-
-
-        <!-- Q1 -->
-
-        <div class="queue-section">
-
-            <h3 style="color: var(--interactive);">
-                Q1 — INTERACTIVE
-            </h3>
-
-            <div id="interactiveProcesses"></div>
-
-        </div>
-
-
-        <!-- Q2 -->
-
-        <div class="queue-section">
-
-            <h3 style="color: var(--background);">
-                Q2 — BACKGROUND
-            </h3>
-
-            <div id="backgroundProcesses"></div>
 
         </div>
 
     </section>
 
 
-    <!-- AGING -->
+    <!-- =====================================================
+         SIMULATION STATUS
+         ===================================================== -->
+
+    <section class="panel">
+
+        <h2>
+            LATEST SIMULATION
+        </h2>
+
+        <p
+            class="dashboard-description"
+            id="queueStatus">
+
+            No simulation has been run yet.
+
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUEUE WORKLOAD
+         ===================================================== -->
+
+    <section class="panel">
+
+        <h2>
+            CURRENT WORKLOAD
+        </h2>
+
+
+        <!-- EMERGENCY -->
+
+        <div class="queue-process">
+
+            <strong>
+                Q0 · EMERGENCY
+            </strong>
+
+            <div id="emergencyProcesses">
+            </div>
+
+        </div>
+
+
+        <!-- INTERACTIVE -->
+
+        <div class="queue-process">
+
+            <strong>
+                Q1 · INTERACTIVE
+            </strong>
+
+            <div id="interactiveProcesses">
+            </div>
+
+        </div>
+
+
+        <!-- BACKGROUND -->
+
+        <div class="queue-process">
+
+            <strong>
+                Q2 · BACKGROUND
+            </strong>
+
+            <div id="backgroundProcesses">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         AGING
+         ===================================================== -->
 
     <section class="panel">
 
@@ -199,88 +268,273 @@
 
         <p class="dashboard-description">
 
-            Waiting processes receive an aging adjustment to their
-            effective priority. Background processes can be promoted
-            to the Interactive queue to reduce starvation, but are
-            never promoted to Emergency.
+            Background processes can be promoted to the
+            Interactive queue when they experience
+            prolonged waiting. They are never promoted
+            directly to the Emergency queue.
 
         </p>
+
+        <div class="dashboard-grid">
+
+            <div class="panel">
+
+                <div class="metric-label">
+                    BACKGROUND AGING SLOPE
+                </div>
+
+                <div class="metric-value">
+                    0.2
+                </div>
+
+                <div class="metric-unit">
+                    PRIORITY UNITS / TICK
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="metric-label">
+                    PROMOTION BASE
+                </div>
+
+                <div class="metric-value">
+                    8
+                </div>
+
+                <div class="metric-unit">
+                    PRIORITY UNITS
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="metric-label">
+                    PROMOTION THRESHOLD
+                </div>
+
+                <div class="metric-value">
+                    40
+                </div>
+
+                <div class="metric-unit">
+                    WAITING TICKS
+                </div>
+
+            </div>
+
+        </div>
 
     </section>
 
 
-    <div class="footnote">
+    <footer class="footer">
 
-        Queue assignment is based on the simulated hospital workload
-        defined in data.js.
+        Medicore · Adaptive Multilevel Queue CPU Scheduler
 
-    </div>
+    </footer>
 
 </div>
 
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
 
 <script src="../js/common.js"></script>
 
 <script src="../js/data.js"></script>
 
+<script src="../js/results.js"></script>
+
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    const emergencyContainer =
-        document.getElementById("emergencyProcesses");
-
-    const interactiveContainer =
-        document.getElementById("interactiveProcesses");
-
-    const backgroundContainer =
-        document.getElementById("backgroundProcesses");
+        const results =
+            loadSimulationResults();
 
 
-    hospitalProcesses.forEach(function (process) {
-
-        const item = document.createElement("div");
-
-        item.className = "queue-process";
-
-
-        item.innerHTML = `
-            <strong>${process.id}</strong>
-            — ${process.name}
-
-            <span>
-                Arrival: ${process.arrival}
-                | Burst: ${process.burst}
-                | Priority: ${process.priority ?? "—"}
-            </span>
-        `;
+        const status =
+            document.getElementById(
+                "queueStatus"
+            );
 
 
-        if (process.queue === "Emergency") {
+        let processes = [];
 
-            emergencyContainer.appendChild(item);
+
+        /* =================================================
+           USE LATEST RESULTS IF AVAILABLE
+           ================================================= */
+
+        if (
+            results &&
+            results.processes &&
+            results.processes.length > 0
+        ) {
+
+            processes =
+                results.processes;
+
+            status.textContent =
+                "Showing queue membership and results from the latest completed simulation.";
+
+        } else {
+
+            /*
+             * Otherwise use configured workload.
+             */
+
+            processes =
+                hospitalProcesses.map(
+                    process => ({
+                        pid: process.id,
+                        name: process.name,
+                        queue: process.queue,
+                        arrival: process.arrival,
+                        burst: process.burst,
+                        promotions: 0
+                    })
+                );
 
         }
 
-        else if (process.queue === "Interactive") {
 
-            interactiveContainer.appendChild(item);
+        /* =================================================
+           FIND QUEUE CONTAINERS
+           ================================================= */
 
-        }
+        const emergencyContainer =
+            document.getElementById(
+                "emergencyProcesses"
+            );
 
-        else if (process.queue === "Background") {
+        const interactiveContainer =
+            document.getElementById(
+                "interactiveProcesses"
+            );
 
-            backgroundContainer.appendChild(item);
+        const backgroundContainer =
+            document.getElementById(
+                "backgroundProcesses"
+            );
 
-        }
 
-    });
+        emergencyContainer.innerHTML = "";
+        interactiveContainer.innerHTML = "";
+        backgroundContainer.innerHTML = "";
 
-});
+
+        /* =================================================
+           DISPLAY PROCESS
+           ================================================= */
+
+        processes.forEach(process => {
+
+            let container;
+
+
+            if (
+                process.queue === 0 ||
+                String(process.queue)
+                    .toLowerCase() ===
+                    "emergency"
+            ) {
+
+                container =
+                    emergencyContainer;
+
+            } else if (
+                process.queue === 1 ||
+                String(process.queue)
+                    .toLowerCase() ===
+                    "interactive"
+            ) {
+
+                container =
+                    interactiveContainer;
+
+            } else {
+
+                container =
+                    backgroundContainer;
+            }
+
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            const completed =
+                process.completion !== undefined &&
+                process.completion !== null;
+
+
+            let extraInfo = "";
+
+
+            if (results && completed) {
+
+                extraInfo =
+                    " · wait=" +
+                    Number(
+                        process.waiting
+                    ).toFixed(1) +
+
+                    " · response=" +
+                    Number(
+                        process.response
+                    ).toFixed(1) +
+
+                    " · promotions=" +
+                    (
+                        process.promotions || 0
+                    );
+
+            } else {
+
+                extraInfo =
+                    " · arrival=" +
+                    process.arrival +
+
+                    " · burst=" +
+                    process.burst;
+            }
+
+
+            div.innerHTML = `
+
+                <strong>
+                    ${process.pid}
+                </strong>
+
+                <span>
+                    ${process.name}
+                    ${extraInfo}
+                </span>
+
+            `;
+
+
+            container.appendChild(div);
+
+        });
+
+    }
+
+);
 
 </script>
-
 
 </body>
 

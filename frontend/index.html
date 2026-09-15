@@ -2,52 +2,33 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Medicore - AMQ Scheduler</title>
+    <title>Dashboard - Medicore</title>
 
     <link rel="stylesheet" href="css/style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-
 </head>
-
 
 <body>
 
-<div class="wrap">
+<div class="app">
 
-
-    <!-- HEADER -->
-
-    <div class="topbar">
+    <header class="topbar">
 
         <div>
-
-            <div class="title">
-                Medicore
-            </div>
-
+            <div class="brand">MEDICORE</div>
             <div class="subtitle">
                 Adaptive Multilevel Queue CPU Scheduler
             </div>
-
         </div>
 
-        <div class="status-pill">
-            SIMULATION SYSTEM
+        <div class="status">
+            ● SIMULATOR READY
         </div>
 
-    </div>
+    </header>
 
-
-    <!-- NAVIGATION -->
 
     <nav class="main-nav">
 
@@ -78,39 +59,40 @@
     </nav>
 
 
-    <!-- INTRO -->
-
     <section class="panel">
 
-        <h2>
-            ADAPTIVE MULTILEVEL QUEUE CPU SCHEDULER
-        </h2>
+        <div class="panel-title">
+            HOSPITAL CPU SCHEDULING SYSTEM
+        </div>
 
         <p class="dashboard-description">
-            A discrete-event CPU scheduling simulator designed around
-            a simulated hospital workload.
+
+            Adaptive Multilevel Queue scheduling simulator designed
+            for hospital workloads. Emergency tasks receive immediate
+            priority, interactive workloads use Round Robin scheduling,
+            and background workloads use FCFS with aging-based
+            promotion to prevent starvation.
+
         </p>
 
     </section>
 
 
-    <!-- THREE QUEUES -->
+    <!-- QUEUES -->
 
-    <div class="dashboard-grid">
-
+    <section class="dashboard-grid">
 
         <div class="panel queue-card emergency-card">
 
             <div class="queue-number">
-                Q0
+                QUEUE 0
             </div>
 
-            <h2>
-                Emergency
-            </h2>
+            <h2>Emergency</h2>
 
             <p>
-                Critical hospital tasks requiring immediate CPU attention.
+                Critical workloads including ECG alerts,
+                ICU monitoring and Code Blue events.
             </p>
 
             <div class="queue-policy">
@@ -123,19 +105,18 @@
         <div class="panel queue-card interactive-card">
 
             <div class="queue-number">
-                Q1
+                QUEUE 1
             </div>
 
-            <h2>
-                Interactive
-            </h2>
+            <h2>Interactive</h2>
 
             <p>
-                User-facing tasks such as dashboards and EMR lookups.
+                Doctor dashboards, EMR lookups and
+                nurse charting operations.
             </p>
 
             <div class="queue-policy">
-                ROUND ROBIN · 4 TICKS
+                ROUND ROBIN · Q = 4
             </div>
 
         </div>
@@ -144,272 +125,293 @@
         <div class="panel queue-card background-card">
 
             <div class="queue-number">
-                Q2
+                QUEUE 2
             </div>
 
-            <h2>
-                Background
-            </h2>
+            <h2>Background</h2>
 
             <p>
-                Non-urgent batch workloads running when higher queues are clear.
+                Billing, backups and reporting workloads.
+                Aging prevents indefinite starvation.
             </p>
 
             <div class="queue-policy">
-                FCFS
+                FCFS + AGING
             </div>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- QUICK STATS -->
-
-    <div class="tiles">
-
-
-        <div class="tile">
-
-            <div class="label">
-                QUEUES
-            </div>
-
-            <div class="value">
-                3
-            </div>
-
-        </div>
-
-
-        <div class="tile">
-
-            <div class="label">
-                WORKLOADS
-            </div>
-
-            <div class="value" id="workloadCount">
-                —
-            </div>
-
-        </div>
-
-
-        <div class="tile">
-
-            <div class="label">
-                QUANTUM
-            </div>
-
-            <div class="value">
-                4
-            </div>
-
-        </div>
-
-
-        <div class="tile">
-
-            <div class="label">
-                AGING
-            </div>
-
-            <div class="value">
-                ON
-            </div>
-
-        </div>
-
-
-        <div class="tile good">
-
-            <div class="label">
-                AMQ
-            </div>
-
-            <div class="value">
-                READY
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-    <!-- WORKLOAD BREAKDOWN -->
+    <!-- WORKLOAD -->
 
     <section class="panel">
 
-        <h2>
-            WORKLOAD BREAKDOWN
-        </h2>
+        <div class="panel-title">
+            CURRENT WORKLOAD
+        </div>
 
-        <p class="dashboard-description">
-            Current hospital workload classified across the three
-            Adaptive Multilevel Queue scheduling levels.
+        <div class="dashboard-grid">
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    TOTAL PROCESSES
+                </div>
+
+                <div class="metric-value"
+                     id="workloadCount">
+                    8
+                </div>
+
+                <div class="metric-unit">
+                    PROCESSES
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    EMERGENCY
+                </div>
+
+                <div class="metric-value"
+                     id="emergencyCount">
+                    3
+                </div>
+
+                <div class="metric-unit">
+                    CRITICAL
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    INTERACTIVE
+                </div>
+
+                <div class="metric-value"
+                     id="interactiveCount">
+                    3
+                </div>
+
+                <div class="metric-unit">
+                    REAL-TIME
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    BACKGROUND
+                </div>
+
+                <div class="metric-value"
+                     id="backgroundCount">
+                    2
+                </div>
+
+                <div class="metric-unit">
+                    NON-CRITICAL
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- LATEST SIMULATION -->
+
+    <section class="panel">
+
+        <div class="panel-title">
+            LATEST SIMULATION
+        </div>
+
+        <p id="simulationStatus"
+           class="dashboard-description">
+
+            No simulation has been executed yet.
+
         </p>
 
 
         <div class="dashboard-grid">
 
+            <div class="panel metric-box">
 
-            <div class="panel queue-card emergency-card">
-
-                <div class="queue-number">
-                    Q0
+                <div class="metric-label">
+                    AVG WAITING
                 </div>
 
-                <h2 id="emergencyCount">
-                    —
-                </h2>
+                <div class="metric-value"
+                     id="avgWaiting">
+                    --
+                </div>
 
-                <p>
-                    Emergency processes
-                </p>
+                <div class="metric-unit">
+                    TICKS
+                </div>
 
             </div>
 
 
-            <div class="panel queue-card interactive-card">
+            <div class="panel metric-box">
 
-                <div class="queue-number">
-                    Q1
+                <div class="metric-label">
+                    AVG TURNAROUND
                 </div>
 
-                <h2 id="interactiveCount">
-                    —
-                </h2>
+                <div class="metric-value"
+                     id="avgTurnaround">
+                    --
+                </div>
 
-                <p>
-                    Interactive processes
-                </p>
+                <div class="metric-unit">
+                    TICKS
+                </div>
 
             </div>
 
 
-            <div class="panel queue-card background-card">
+            <div class="panel metric-box">
 
-                <div class="queue-number">
-                    Q2
+                <div class="metric-label">
+                    CPU UTILIZATION
                 </div>
 
-                <h2 id="backgroundCount">
-                    —
-                </h2>
+                <div class="metric-value"
+                     id="cpuUtilization">
+                    --
+                </div>
 
-                <p>
-                    Background processes
-                </p>
+                <div class="metric-unit">
+                    UTILIZATION
+                </div>
 
             </div>
-
 
         </div>
 
     </section>
 
 
-    <!-- OPEN SCHEDULER -->
+    <!-- ACTION -->
 
     <section class="panel">
 
-        <h2>
-            RUN SIMULATION
-        </h2>
+        <div class="panel-title">
+            SCHEDULER CONTROL
+        </div>
 
         <p class="dashboard-description">
-            View the live CPU scheduling simulation, process execution,
-            queue transitions, Gantt chart and scheduling metrics.
+
+            Run the hospital workload through the Adaptive
+            Multilevel Queue scheduler and inspect the resulting
+            execution timeline and performance metrics.
+
         </p>
 
-        <div class="btn-row">
+        <br>
 
-            <a
-                href="pages/scheduler.html"
-                class="btn primary"
-                style="text-decoration:none;"
-            >
-                OPEN SCHEDULER →
-            </a>
+        <a href="pages/scheduler.html"
+           class="button">
 
-        </div>
+            OPEN SCHEDULER
+
+        </a>
 
     </section>
 
 
-    <!-- FOOTNOTE -->
+    <footer>
 
-    <div class="footnote">
+        MEDICORE · OPERATING SYSTEMS PROJECT
 
-        Medicore · Adaptive Multilevel Queue CPU Scheduling
-        <br>
-
-        Hospital workload simulation · Emergency preemption ·
-        Round Robin · FCFS · Aging
-
-    </div>
-
+    </footer>
 
 </div>
 
 
-<!-- JAVASCRIPT -->
-
 <script src="js/common.js"></script>
-
 <script src="js/data.js"></script>
+<script src="js/results.js"></script>
 
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-
-    // Count processes in each queue
-
-    const emergency =
-        hospitalProcesses.filter(
-            process => process.queue === "Emergency"
-        ).length;
-
-
-    const interactive =
-        hospitalProcesses.filter(
-            process => process.queue === "Interactive"
-        ).length;
-
-
-    const background =
-        hospitalProcesses.filter(
-            process => process.queue === "Background"
-        ).length;
-
-
-    // Total workload
+    /*
+     * Default workload
+     */
 
     document.getElementById("workloadCount").textContent =
         hospitalProcesses.length;
 
-
-    // Queue counts
-
     document.getElementById("emergencyCount").textContent =
-        emergency;
-
+        hospitalProcesses.filter(
+            p => p.queue === "Emergency"
+        ).length;
 
     document.getElementById("interactiveCount").textContent =
-        interactive;
-
+        hospitalProcesses.filter(
+            p => p.queue === "Interactive"
+        ).length;
 
     document.getElementById("backgroundCount").textContent =
-        background;
+        hospitalProcesses.filter(
+            p => p.queue === "Background"
+        ).length;
 
+
+    /*
+     * Load latest simulation
+     */
+
+    const results = loadSimulationResults();
+
+    if (!results || !results.metrics) {
+
+        return;
+
+    }
+
+
+    document.getElementById("simulationStatus").textContent =
+        "Latest simulation completed successfully.";
+
+
+    document.getElementById("avgWaiting").textContent =
+        Number(
+            results.metrics.averageWaiting
+        ).toFixed(2);
+
+
+    document.getElementById("avgTurnaround").textContent =
+        Number(
+            results.metrics.averageTurnaround
+        ).toFixed(2);
+
+
+    document.getElementById("cpuUtilization").textContent =
+        Number(
+            results.metrics.cpuUtilization
+        ).toFixed(1) + "%";
 
 });
 
 </script>
-
 
 </body>
 
