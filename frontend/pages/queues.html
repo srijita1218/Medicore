@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Queues - Medicore</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <div class="topbar">
+
+        <div>
+
+            <div class="title">
+                Queue Policies
+            </div>
+
+            <div class="subtitle">
+                Scheduling policy used by each queue
+            </div>
+
+        </div>
+
+        <div class="status-pill">
+            AMQ
+        </div>
+
+    </div>
+
+
+    <nav class="main-nav">
+
+        <a href="../index.html" data-page>Dashboard</a>
+        <a href="scheduler.html" data-page>Scheduler</a>
+        <a href="processes.html" data-page>Processes</a>
+        <a href="queues.html" data-page>Queues</a>
+        <a href="metrics.html" data-page>Metrics</a>
+        <a href="experiments.html" data-page>Experiments</a>
+
+    </nav>
+
+
+    <!-- QUEUE CARDS -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- EMERGENCY -->
+
+        <div class="panel queue-card emergency-card">
+
+            <div class="queue-number">
+                Q0
+            </div>
+
+            <h2>
+                Emergency
+            </h2>
+
+            <p>
+                Critical tasks are scheduled before lower-priority
+                workloads and can immediately preempt the running process.
+            </p>
+
+            <div class="queue-policy">
+                PREEMPTIVE PRIORITY
+            </div>
+
+        </div>
+
+
+        <!-- INTERACTIVE -->
+
+        <div class="panel queue-card interactive-card">
+
+            <div class="queue-number">
+                Q1
+            </div>
+
+            <h2>
+                Interactive
+            </h2>
+
+            <p>
+                Interactive workloads share CPU time using a fixed
+                Round Robin quantum.
+            </p>
+
+            <div class="queue-policy">
+                ROUND ROBIN · 4 TICKS
+            </div>
+
+        </div>
+
+
+        <!-- BACKGROUND -->
+
+        <div class="panel queue-card background-card">
+
+            <div class="queue-number">
+                Q2
+            </div>
+
+            <h2>
+                Background
+            </h2>
+
+            <p>
+                Background work uses FCFS and executes when higher
+                priority queues are clear.
+            </p>
+
+            <div class="queue-policy">
+                FCFS
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROCESSES CURRENTLY ASSIGNED TO EACH QUEUE -->
+
+    <section class="panel">
+
+        <h2>
+            QUEUE WORKLOAD
+        </h2>
+
+        <p class="dashboard-description">
+            Processes from the hospital workload are classified into
+            one of the three scheduling queues.
+        </p>
+
+
+        <!-- Q0 -->
+
+        <div class="queue-section">
+
+            <h3 style="color: var(--emergency);">
+                Q0 — EMERGENCY
+            </h3>
+
+            <div id="emergencyProcesses"></div>
+
+        </div>
+
+
+        <!-- Q1 -->
+
+        <div class="queue-section">
+
+            <h3 style="color: var(--interactive);">
+                Q1 — INTERACTIVE
+            </h3>
+
+            <div id="interactiveProcesses"></div>
+
+        </div>
+
+
+        <!-- Q2 -->
+
+        <div class="queue-section">
+
+            <h3 style="color: var(--background);">
+                Q2 — BACKGROUND
+            </h3>
+
+            <div id="backgroundProcesses"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- AGING -->
+
+    <section class="panel">
+
+        <h2>
+            AGING & PROMOTION
+        </h2>
+
+        <p class="dashboard-description">
+
+            Waiting processes receive an aging adjustment to their
+            effective priority. Background processes can be promoted
+            to the Interactive queue to reduce starvation, but are
+            never promoted to Emergency.
+
+        </p>
+
+    </section>
+
+
+    <div class="footnote">
+
+        Queue assignment is based on the simulated hospital workload
+        defined in data.js.
+
+    </div>
+
+</div>
+
+
+<script src="../js/common.js"></script>
+
+<script src="../js/data.js"></script>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const emergencyContainer =
+        document.getElementById("emergencyProcesses");
+
+    const interactiveContainer =
+        document.getElementById("interactiveProcesses");
+
+    const backgroundContainer =
+        document.getElementById("backgroundProcesses");
+
+
+    hospitalProcesses.forEach(function (process) {
+
+        const item = document.createElement("div");
+
+        item.className = "queue-process";
+
+
+        item.innerHTML = `
+            <strong>${process.id}</strong>
+            — ${process.name}
+
+            <span>
+                Arrival: ${process.arrival}
+                | Burst: ${process.burst}
+                | Priority: ${process.priority ?? "—"}
+            </span>
+        `;
+
+
+        if (process.queue === "Emergency") {
+
+            emergencyContainer.appendChild(item);
+
+        }
+
+        else if (process.queue === "Interactive") {
+
+            interactiveContainer.appendChild(item);
+
+        }
+
+        else if (process.queue === "Background") {
+
+            backgroundContainer.appendChild(item);
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Processes - Medicore</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <div class="topbar">
+
+        <div>
+            <div class="title">
+                Processes
+            </div>
+
+            <div class="subtitle">
+                Hospital workload entering the CPU scheduler
+            </div>
+        </div>
+
+        <div class="status-pill">
+            WORKLOAD
+        </div>
+
+    </div>
+
+
+    <nav class="main-nav">
+
+        <a href="../index.html" data-page>Dashboard</a>
+
+        <a href="scheduler.html" data-page>Scheduler</a>
+
+        <a href="processes.html" data-page>Processes</a>
+
+        <a href="queues.html" data-page>Queues</a>
+
+        <a href="metrics.html" data-page>Metrics</a>
+
+        <a href="experiments.html" data-page>Experiments</a>
+
+    </nav>
+
+
+    <section class="panel">
+
+        <h2>
+            HOSPITAL WORKLOAD
+        </h2>
+
+        <p class="dashboard-description">
+            These simulated hospital processes are used to demonstrate
+            Adaptive Multilevel Queue CPU scheduling.
+        </p>
+
+        <div style="overflow-x:auto;">
+
+            <table class="results">
+
+                <thead>
+
+                    <tr>
+                        <th>PID</th>
+                        <th>PROCESS</th>
+                        <th>QUEUE</th>
+                        <th>ARRIVAL</th>
+                        <th>BURST</th>
+                        <th>PRIORITY</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="processTableBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <div class="footnote">
+
+        Arrival time and CPU burst are expressed in simulation ticks.
+
+    </div>
+
+</div>
+
+
+<script src="../js/common.js"></script>
+<script src="../js/data.js"></script>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const tableBody = document.getElementById("processTableBody");
+
+    hospitalProcesses.forEach(process => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${process.id}</td>
+            <td>${process.name}</td>
+            <td>${process.queue.toUpperCase()}</td>
+            <td>${process.arrival}</td>
+            <td>${process.burst}</td>
+            <td>${process.priority ?? "—"}</td>
+        `;
+
+        tableBody.appendChild(row);
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

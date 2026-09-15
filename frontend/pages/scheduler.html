@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="../css/style.css">
+<meta charset="UTF-8">
+<title>AMQ Scheduler Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div>
+      <div class="title">AMQ Scheduler Console</div>
+      <div class="subtitle">Adaptive Multilevel Queue CPU Scheduling — Hospital Management Systems</div>
+    </div>
+    <div class="status-pill" id="statusPill">IDLE</div>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: intake -->
+    <div>
+      <div class="panel">
+        <h2>TASK QUEUE</h2>
+        <div id="taskList"></div>
+        <div class="add-form">
+          <div class="full">
+            <label>Process name</label>
+            <input id="fName" type="text" placeholder="e.g. ICU Monitor - Bed 6" />
+          </div>
+          <div>
+            <label>Queue</label>
+            <select id="fQueue">
+              <option value="0">Emergency</option>
+              <option value="1" selected>Interactive</option>
+              <option value="2">Background</option>
+            </select>
+          </div>
+          <div>
+            <label>Base priority (0=highest)</label>
+            <input id="fPriority" type="number" value="5" min="0" max="10" />
+          </div>
+          <div>
+            <label>Arrival tick</label>
+            <input id="fArrival" type="number" value="0" min="0" />
+          </div>
+          <div>
+            <label>Burst (ticks)</label>
+            <input id="fBurst" type="number" value="5" min="1" />
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn primary" id="btnAdd" style="flex:1">Add task</button>
+        </div>
+        <div class="btn-row presets">
+          <button class="btn" id="btnPresetHospital">Hospital demo</button>
+          <button class="btn" id="btnPresetStress">Stress test</button>
+          <button class="btn" id="btnClear">Clear all</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>RUN CONTROLS</h2>
+        <div class="btn-row">
+          <button class="btn primary" id="btnRun" style="flex:1">▶ Run simulation</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="btnStep" style="flex:1">Step +1 tick</button>
+          <button class="btn" id="btnReset" style="flex:1">Reset</button>
+        </div>
+        <div class="speed-row">
+          <span>Slow</span>
+          <input type="range" id="speedRange" min="1" max="10" value="6">
+          <span>Fast</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: console -->
+    <div>
+      <div class="panel">
+        <h2>LIVE EXECUTION — AMQ SCHEDULER</h2>
+        <div class="now-running">
+          <div class="badge q1" id="nowBadge">— idle —</div>
+          <div class="tick" id="tickLabel">t = 0</div>
+        </div>
+        <div class="legend">
+          <span><i class="q0"></i>Emergency</span>
+          <span><i class="q1"></i>Interactive</span>
+          <span><i class="q2"></i>Background</span>
+        </div>
+        <div class="gantt-wrap" id="ganttWrap">
+          <div class="empty-note">Add tasks (or load a preset) and press Run.</div>
+        </div>
+
+        <div class="tiles">
+          <div class="tile"><div class="label">ELAPSED</div><div class="value" id="tElapsed">0</div></div>
+          <div class="tile"><div class="label">CPU UTIL %</div><div class="value" id="tUtil">0</div></div>
+          <div class="tile"><div class="label">AVG WAIT</div><div class="value" id="tWait">0</div></div>
+          <div class="tile"><div class="label">EMER. RESP</div><div class="value" id="tEmerg">0</div></div>
+          <div class="tile" id="tileBg"><div class="label">BACKGROUND</div><div class="value" id="tBg">OK</div></div>
+        </div>
+      </div>
+
+      <div class="panel" id="resultsPanel" style="display:none;">
+        <h2>COMPLETED PROCESSES (AMQ)</h2>
+        <table class="results" id="resultsTable"></table>
+      </div>
+
+      <div class="panel" id="comparePanel" style="display:none;">
+        <h2>AMQ vs. PLAIN FCFS BASELINE</h2>
+        <div class="compare-bars" id="compareBars"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    Mirrors the logic in amq_scheduler.py: Emergency = preemptive priority, Interactive = Round Robin
+    (quantum 4 ticks), Background = FCFS with promotion-based aging into Interactive after a configurable wait threshold.
+    Runs entirely client-side in this page — nothing is sent anywhere.
+  </div>
+</div>
+<script src="js/common.js"></script>
+<script src="../js/scheduler.js"></script>
+</body>
+</html>
