@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Metrics - Medicore</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+</head>
+
+
+<body>
+
+<div class="wrap">
+
+
+    <!-- HEADER -->
+
+    <div class="topbar">
+
+        <div>
+
+            <div class="title">
+                Scheduling Metrics
+            </div>
+
+            <div class="subtitle">
+                Performance analysis of the AMQ scheduler
+            </div>
+
+        </div>
+
+        <div class="status-pill">
+            METRICS
+        </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="main-nav">
+
+        <a href="../index.html" data-page>
+            Dashboard
+        </a>
+
+        <a href="scheduler.html" data-page>
+            Scheduler
+        </a>
+
+        <a href="processes.html" data-page>
+            Processes
+        </a>
+
+        <a href="queues.html" data-page>
+            Queues
+        </a>
+
+        <a href="metrics.html" data-page>
+            Metrics
+        </a>
+
+        <a href="experiments.html" data-page>
+            Experiments
+        </a>
+
+    </nav>
+
+
+    <!-- MAIN AMQ METRICS -->
+
+    <section class="panel">
+
+        <h2>
+            AMQ PERFORMANCE
+        </h2>
+
+        <p class="dashboard-description">
+            Results obtained from the hospital workload simulation
+            using the proposed Adaptive Multilevel Queue scheduler.
+        </p>
+
+
+        <div class="dashboard-grid">
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    AVG WAITING TIME
+                </div>
+
+                <div class="metric-value">
+                    16.50
+                </div>
+
+                <div class="metric-unit">
+                    ticks
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    AVG TURNAROUND TIME
+                </div>
+
+                <div class="metric-value">
+                    23.62
+                </div>
+
+                <div class="metric-unit">
+                    ticks
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    AVG RESPONSE TIME
+                </div>
+
+                <div class="metric-value">
+                    11.62
+                </div>
+
+                <div class="metric-unit">
+                    ticks
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    CPU UTILIZATION
+                </div>
+
+                <div class="metric-value">
+                    57.0%
+                </div>
+
+                <div class="metric-unit">
+                    processor usage
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    EMERGENCY RESPONSE
+                </div>
+
+                <div class="metric-value">
+                    0.00
+                </div>
+
+                <div class="metric-unit">
+                    ticks
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DYNAMIC WORKLOAD SUMMARY -->
+
+    <section class="panel">
+
+        <h2>
+            WORKLOAD SUMMARY
+        </h2>
+
+        <p class="dashboard-description">
+            Statistics calculated directly from the hospital workload
+            defined in data.js.
+        </p>
+
+
+        <div class="dashboard-grid">
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    TOTAL PROCESSES
+                </div>
+
+                <div
+                    class="metric-value"
+                    id="totalProcesses"
+                >
+                    —
+                </div>
+
+                <div class="metric-unit">
+                    processes
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    TOTAL CPU BURST
+                </div>
+
+                <div
+                    class="metric-value"
+                    id="totalBurst"
+                >
+                    —
+                </div>
+
+                <div class="metric-unit">
+                    ticks
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    EMERGENCY TASKS
+                </div>
+
+                <div
+                    class="metric-value"
+                    id="emergencyCount"
+                >
+                    —
+                </div>
+
+                <div class="metric-unit">
+                    processes
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    INTERACTIVE TASKS
+                </div>
+
+                <div
+                    class="metric-value"
+                    id="interactiveCount"
+                >
+                    —
+                </div>
+
+                <div class="metric-unit">
+                    processes
+                </div>
+
+            </div>
+
+
+            <div class="panel metric-box">
+
+                <div class="metric-label">
+                    BACKGROUND TASKS
+                </div>
+
+                <div
+                    class="metric-value"
+                    id="backgroundCount"
+                >
+                    —
+                </div>
+
+                <div class="metric-unit">
+                    processes
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- AMQ VS FCFS -->
+
+    <section class="panel">
+
+        <h2>
+            AMQ vs FCFS
+        </h2>
+
+        <p class="dashboard-description">
+            Comparison between the proposed Adaptive Multilevel Queue
+            scheduler and a simple FCFS baseline.
+        </p>
+
+
+        <div style="overflow-x:auto;">
+
+            <table class="results">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            METRIC
+                        </th>
+
+                        <th>
+                            AMQ
+                        </th>
+
+                        <th>
+                            FCFS
+                        </th>
+
+                        <th>
+                            IMPROVEMENT
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            Average Waiting Time
+                        </td>
+
+                        <td>
+                            16.50
+                        </td>
+
+                        <td>
+                            26.38
+                        </td>
+
+                        <td>
+                            37.45%
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Average Turnaround Time
+                        </td>
+
+                        <td>
+                            23.62
+                        </td>
+
+                        <td>
+                            33.50
+                        </td>
+
+                        <td>
+                            29.49%
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Emergency Response Time
+                        </td>
+
+                        <td>
+                            0.00
+                        </td>
+
+                        <td>
+                            30.67
+                        </td>
+
+                        <td>
+                            100%
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- INTERPRETATION -->
+
+    <section class="panel">
+
+        <h2>
+            INTERPRETATION
+        </h2>
+
+        <p class="dashboard-description">
+
+            The AMQ scheduler prioritizes time-critical Emergency
+            workloads while allowing Interactive processes to share
+            CPU time through Round Robin scheduling. Background
+            workloads use FCFS and may be promoted through aging
+            when they experience prolonged waiting.
+
+        </p>
+
+        <p class="dashboard-description">
+
+            In the simulated hospital workload, AMQ reduces average
+            waiting and turnaround time compared with the FCFS
+            baseline while providing immediate response for Emergency
+            processes.
+
+        </p>
+
+    </section>
+
+
+    <div class="footnote">
+
+        Metrics shown above are based on the current hospital
+        workload simulation.
+
+    </div>
+
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<script src="../js/common.js"></script>
+
+<script src="../js/data.js"></script>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    // ---------------------------------------
+    // TOTAL NUMBER OF PROCESSES
+    // ---------------------------------------
+
+    const totalProcesses =
+        hospitalProcesses.length;
+
+
+    // ---------------------------------------
+    // TOTAL CPU BURST
+    // ---------------------------------------
+
+    const totalBurst =
+        hospitalProcesses.reduce(
+            function (sum, process) {
+
+                return sum + process.burst;
+
+            },
+            0
+        );
+
+
+    // ---------------------------------------
+    // QUEUE COUNTS
+    // ---------------------------------------
+
+    const emergencyCount =
+        hospitalProcesses.filter(
+            function (process) {
+
+                return process.queue === "Emergency";
+
+            }
+        ).length;
+
+
+    const interactiveCount =
+        hospitalProcesses.filter(
+            function (process) {
+
+                return process.queue === "Interactive";
+
+            }
+        ).length;
+
+
+    const backgroundCount =
+        hospitalProcesses.filter(
+            function (process) {
+
+                return process.queue === "Background";
+
+            }
+        ).length;
+
+
+    // ---------------------------------------
+    // DISPLAY RESULTS
+    // ---------------------------------------
+
+    document.getElementById("totalProcesses")
+        .textContent = totalProcesses;
+
+
+    document.getElementById("totalBurst")
+        .textContent = totalBurst;
+
+
+    document.getElementById("emergencyCount")
+        .textContent = emergencyCount;
+
+
+    document.getElementById("interactiveCount")
+        .textContent = interactiveCount;
+
+
+    document.getElementById("backgroundCount")
+        .textContent = backgroundCount;
+
+
+});
+
+</script>
+
+
+</body>
+
+</html>

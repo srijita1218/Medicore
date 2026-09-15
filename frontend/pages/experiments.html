@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Experiments - Medicore</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <div class="topbar">
+
+        <div>
+            <div class="title">
+                Experiments
+            </div>
+
+            <div class="subtitle">
+                Aging, starvation and scheduling-policy experiments
+            </div>
+        </div>
+
+        <div class="status-pill">
+            EXPERIMENTS
+        </div>
+
+    </div>
+
+
+    <nav class="main-nav">
+
+        <a href="../index.html" data-page>Dashboard</a>
+        <a href="scheduler.html" data-page>Scheduler</a>
+        <a href="processes.html" data-page>Processes</a>
+        <a href="queues.html" data-page>Queues</a>
+        <a href="metrics.html" data-page>Metrics</a>
+        <a href="experiments.html" data-page>Experiments</a>
+
+    </nav>
+
+
+    <section class="panel">
+
+        <h2>
+            AGING EXPERIMENTS
+        </h2>
+
+        <p class="dashboard-description">
+
+            Compare the effect of different aging slopes on waiting
+            time and starvation behaviour.
+
+        </p>
+
+        <table class="results">
+
+            <thead>
+
+                <tr>
+                    <th>CONFIGURATION</th>
+                    <th>INTERACTIVE</th>
+                    <th>BACKGROUND</th>
+                    <th>PURPOSE</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>No Aging</td>
+                    <td>0.0</td>
+                    <td>0.0</td>
+                    <td>Baseline</td>
+                </tr>
+
+                <tr>
+                    <td>Proposed</td>
+                    <td>0.5</td>
+                    <td>0.2</td>
+                    <td>Balanced starvation prevention</td>
+                </tr>
+
+                <tr>
+                    <td>Aggressive</td>
+                    <td>1.5</td>
+                    <td>1.0</td>
+                    <td>Stress test</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+    <section class="panel">
+
+        <h2>
+            WHAT TO OBSERVE
+        </h2>
+
+        <p class="dashboard-description">
+
+            The primary objective is to observe how aging changes
+            waiting time and starvation while preserving rapid response
+            for Emergency workloads.
+
+        </p>
+
+    </section>
+
+</div>
+
+
+<script src="../js/common.js"></script>
+
+</body>
+</html>
