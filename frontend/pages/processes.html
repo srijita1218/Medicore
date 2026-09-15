@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,82 +7,135 @@
     <title>Processes - Medicore</title>
 
     <link rel="stylesheet" href="../css/style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
 
 <div class="wrap">
 
-    <div class="topbar">
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="topbar">
 
         <div>
-            <div class="title">
-                Processes
+            <div class="brand">
+                MEDICORE
             </div>
 
             <div class="subtitle">
-                Hospital workload entering the CPU scheduler
+                Adaptive Multilevel Queue CPU Scheduling
             </div>
         </div>
 
-        <div class="status-pill">
-            WORKLOAD
+        <div class="top-status">
+            CPU SCHEDULER
         </div>
 
-    </div>
+    </header>
 
+
+    <!-- =====================================================
+         NAVIGATION
+         ===================================================== -->
 
     <nav class="main-nav">
 
-        <a href="../index.html" data-page>Dashboard</a>
+        <a href="../index.html" data-page>
+            Dashboard
+        </a>
 
-        <a href="scheduler.html" data-page>Scheduler</a>
+        <a href="scheduler.html" data-page>
+            Scheduler
+        </a>
 
-        <a href="processes.html" data-page>Processes</a>
+        <a href="processes.html" data-page>
+            Processes
+        </a>
 
-        <a href="queues.html" data-page>Queues</a>
+        <a href="queues.html" data-page>
+            Queues
+        </a>
 
-        <a href="metrics.html" data-page>Metrics</a>
+        <a href="metrics.html" data-page>
+            Metrics
+        </a>
 
-        <a href="experiments.html" data-page>Experiments</a>
+        <a href="experiments.html" data-page>
+            Experiments
+        </a>
 
     </nav>
 
 
+    <!-- =====================================================
+         PAGE INTRO
+         ===================================================== -->
+
     <section class="panel">
 
-        <h2>
-            HOSPITAL WORKLOAD
-        </h2>
+        <h1>PROCESS WORKLOAD</h1>
 
         <p class="dashboard-description">
-            These simulated hospital processes are used to demonstrate
-            Adaptive Multilevel Queue CPU scheduling.
+            Hospital CPU workload used by the Adaptive
+            Multilevel Queue scheduler.
         </p>
 
-        <div style="overflow-x:auto;">
+    </section>
 
-            <table class="results">
+
+    <!-- =====================================================
+         SIMULATION STATUS
+         ===================================================== -->
+
+    <section class="panel">
+
+        <h2>SIMULATION STATUS</h2>
+
+        <p
+            class="dashboard-description"
+            id="processStatus">
+
+            No simulation has been run yet.
+            Showing configured workload.
+
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROCESS TABLE
+         ===================================================== -->
+
+    <section class="panel">
+
+        <h2>PROCESS DETAILS</h2>
+
+        <div class="table-wrap">
+
+            <table>
 
                 <thead>
 
                     <tr>
                         <th>PID</th>
-                        <th>PROCESS</th>
+                        <th>NAME</th>
                         <th>QUEUE</th>
                         <th>ARRIVAL</th>
                         <th>BURST</th>
                         <th>PRIORITY</th>
+                        <th>COMPLETION</th>
+                        <th>WAITING</th>
+                        <th>RESPONSE</th>
+                        <th>PROMOTIONS</th>
                     </tr>
 
                 </thead>
 
                 <tbody id="processTableBody">
+
                 </tbody>
 
             </table>
@@ -93,39 +145,342 @@
     </section>
 
 
-    <div class="footnote">
+    <!-- =====================================================
+         QUEUE SUMMARY
+         ===================================================== -->
 
-        Arrival time and CPU burst are expressed in simulation ticks.
+    <section class="panel">
 
-    </div>
+        <h2>QUEUE DISTRIBUTION</h2>
+
+        <div class="dashboard-grid">
+
+            <div class="panel queue-card emergency-card">
+
+                <div class="queue-number">
+                    Q0
+                </div>
+
+                <h2>
+                    EMERGENCY
+                </h2>
+
+                <p id="emergencyCount">
+                    0 processes
+                </p>
+
+                <div class="queue-policy">
+                    PREEMPTIVE PRIORITY
+                </div>
+
+            </div>
+
+
+            <div class="panel queue-card interactive-card">
+
+                <div class="queue-number">
+                    Q1
+                </div>
+
+                <h2>
+                    INTERACTIVE
+                </h2>
+
+                <p id="interactiveCount">
+                    0 processes
+                </p>
+
+                <div class="queue-policy">
+                    ROUND ROBIN · Q=4
+                </div>
+
+            </div>
+
+
+            <div class="panel queue-card background-card">
+
+                <div class="queue-number">
+                    Q2
+                </div>
+
+                <h2>
+                    BACKGROUND
+                </h2>
+
+                <p id="backgroundCount">
+                    0 processes
+                </p>
+
+                <div class="queue-policy">
+                    FCFS · AGING
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="footer">
+
+        Medicore · Adaptive Multilevel Queue CPU Scheduler
+
+    </footer>
 
 </div>
 
 
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
 <script src="../js/common.js"></script>
+
 <script src="../js/data.js"></script>
+
+<script src="../js/results.js"></script>
+
+
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const tableBody = document.getElementById("processTableBody");
+    const tableBody =
+        document.getElementById("processTableBody");
 
-    hospitalProcesses.forEach(process => {
+    const status =
+        document.getElementById("processStatus");
 
-        const row = document.createElement("tr");
+
+    /* =====================================================
+       LOAD LATEST SIMULATION RESULTS
+       ===================================================== */
+
+    const results =
+        loadSimulationResults();
+
+
+    let processes = [];
+
+
+    if (
+        results &&
+        results.processes &&
+        results.processes.length > 0
+    ) {
+
+        processes = results.processes;
+
+        status.textContent =
+            "Showing results from the latest completed simulation.";
+
+    } else {
+
+        /*
+         * No simulation yet.
+         * Use the configured hospital workload.
+         */
+
+        processes = hospitalProcesses.map(process => ({
+
+            pid: process.id,
+
+            name: process.name,
+
+            queue: process.queue,
+
+            arrival: process.arrival,
+
+            burst: process.burst,
+
+            basePriority: process.priority,
+
+            completion: null,
+
+            waiting: null,
+
+            response: null,
+
+            promotions: 0
+
+        }));
+
+    }
+
+
+    /* =====================================================
+       DISPLAY PROCESS TABLE
+       ===================================================== */
+
+    tableBody.innerHTML = "";
+
+
+    processes.forEach(process => {
+
+        const row =
+            document.createElement("tr");
+
+
+        const queueName =
+            typeof process.queue === "number"
+                ? (
+                    process.queue === 0
+                        ? "EMERGENCY"
+                        : process.queue === 1
+                            ? "INTERACTIVE"
+                            : "BACKGROUND"
+                )
+                : String(process.queue).toUpperCase();
+
+
+        const priority =
+            process.basePriority !== undefined &&
+            process.basePriority !== null
+                ? process.basePriority
+                : "—";
+
+
+        const completion =
+            process.completion !== undefined &&
+            process.completion !== null
+                ? process.completion
+                : "—";
+
+
+        const waiting =
+            process.waiting !== undefined &&
+            process.waiting !== null
+                ? Number(process.waiting).toFixed(2)
+                : "—";
+
+
+        const response =
+            process.response !== undefined &&
+            process.response !== null
+                ? Number(process.response).toFixed(2)
+                : "—";
+
+
+        const promotions =
+            process.promotions !== undefined
+                ? process.promotions
+                : 0;
+
 
         row.innerHTML = `
-            <td>${process.id}</td>
-            <td>${process.name}</td>
-            <td>${process.queue.toUpperCase()}</td>
-            <td>${process.arrival}</td>
-            <td>${process.burst}</td>
-            <td>${process.priority ?? "—"}</td>
+
+            <td>
+                ${process.pid}
+            </td>
+
+            <td>
+                ${process.name}
+            </td>
+
+            <td>
+                ${queueName}
+            </td>
+
+            <td>
+                ${process.arrival}
+            </td>
+
+            <td>
+                ${process.burst}
+            </td>
+
+            <td>
+                ${priority}
+            </td>
+
+            <td>
+                ${completion}
+            </td>
+
+            <td>
+                ${waiting}
+            </td>
+
+            <td>
+                ${response}
+            </td>
+
+            <td>
+                ${promotions}
+            </td>
+
         `;
+
 
         tableBody.appendChild(row);
 
     });
+
+
+    /* =====================================================
+       QUEUE COUNTS
+       ===================================================== */
+
+    const emergency =
+        processes.filter(process => {
+
+            if (typeof process.queue === "number") {
+                return process.queue === 0;
+            }
+
+            return String(process.queue).toLowerCase()
+                === "emergency";
+
+        });
+
+
+    const interactive =
+        processes.filter(process => {
+
+            if (typeof process.queue === "number") {
+                return process.queue === 1;
+            }
+
+            return String(process.queue).toLowerCase()
+                === "interactive";
+
+        });
+
+
+    const background =
+        processes.filter(process => {
+
+            if (typeof process.queue === "number") {
+                return process.queue === 2;
+            }
+
+            return String(process.queue).toLowerCase()
+                === "background";
+
+        });
+
+
+    document
+        .getElementById("emergencyCount")
+        .textContent =
+            emergency.length + " processes";
+
+
+    document
+        .getElementById("interactiveCount")
+        .textContent =
+            interactive.length + " processes";
+
+
+    document
+        .getElementById("backgroundCount")
+        .textContent =
+            background.length + " processes";
 
 });
 

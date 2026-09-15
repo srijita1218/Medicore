@@ -78,6 +78,42 @@
     </nav>
 
 
+    <!-- SIMULATION STATUS -->
+
+    <section class="panel">
+
+        <h2>
+            SIMULATION STATUS
+        </h2>
+
+        <p
+            class="dashboard-description"
+            id="simulationStatus"
+        >
+            No simulation has been run yet.
+        </p>
+
+    </section>
+
+
+    <!-- LATEST RUN -->
+
+    <section class="panel">
+
+        <h2>
+            LATEST RUN
+        </h2>
+
+        <p
+            class="dashboard-description"
+            id="latestRunSummary"
+        >
+            No simulation data available.
+        </p>
+
+    </section>
+
+
     <!-- MAIN AMQ METRICS -->
 
     <section class="panel">
@@ -95,13 +131,18 @@
         <div class="dashboard-grid">
 
 
+            <!-- AVG WAITING -->
+
             <div class="panel metric-box">
 
                 <div class="metric-label">
                     AVG WAITING TIME
                 </div>
 
-                <div class="metric-value">
+                <div
+                    class="metric-value"
+                    id="avgWaiting"
+                >
                     16.50
                 </div>
 
@@ -112,13 +153,18 @@
             </div>
 
 
+            <!-- AVG TURNAROUND -->
+
             <div class="panel metric-box">
 
                 <div class="metric-label">
                     AVG TURNAROUND TIME
                 </div>
 
-                <div class="metric-value">
+                <div
+                    class="metric-value"
+                    id="avgTurnaround"
+                >
                     23.62
                 </div>
 
@@ -129,13 +175,18 @@
             </div>
 
 
+            <!-- AVG RESPONSE -->
+
             <div class="panel metric-box">
 
                 <div class="metric-label">
                     AVG RESPONSE TIME
                 </div>
 
-                <div class="metric-value">
+                <div
+                    class="metric-value"
+                    id="avgResponse"
+                >
                     11.62
                 </div>
 
@@ -146,13 +197,18 @@
             </div>
 
 
+            <!-- CPU UTILIZATION -->
+
             <div class="panel metric-box">
 
                 <div class="metric-label">
                     CPU UTILIZATION
                 </div>
 
-                <div class="metric-value">
+                <div
+                    class="metric-value"
+                    id="cpuUtilization"
+                >
                     57.0%
                 </div>
 
@@ -163,13 +219,18 @@
             </div>
 
 
+            <!-- EMERGENCY RESPONSE -->
+
             <div class="panel metric-box">
 
                 <div class="metric-label">
                     EMERGENCY RESPONSE
                 </div>
 
-                <div class="metric-value">
+                <div
+                    class="metric-value"
+                    id="emergencyResponse"
+                >
                     0.00
                 </div>
 
@@ -178,6 +239,7 @@
                 </div>
 
             </div>
+
 
         </div>
 
@@ -201,6 +263,8 @@
         <div class="dashboard-grid">
 
 
+            <!-- TOTAL PROCESSES -->
+
             <div class="panel metric-box">
 
                 <div class="metric-label">
@@ -220,6 +284,8 @@
 
             </div>
 
+
+            <!-- TOTAL CPU BURST -->
 
             <div class="panel metric-box">
 
@@ -241,6 +307,8 @@
             </div>
 
 
+            <!-- EMERGENCY TASKS -->
+
             <div class="panel metric-box">
 
                 <div class="metric-label">
@@ -260,6 +328,8 @@
 
             </div>
 
+
+            <!-- INTERACTIVE TASKS -->
 
             <div class="panel metric-box">
 
@@ -281,6 +351,8 @@
             </div>
 
 
+            <!-- BACKGROUND TASKS -->
+
             <div class="panel metric-box">
 
                 <div class="metric-label">
@@ -299,6 +371,7 @@
                 </div>
 
             </div>
+
 
         </div>
 
@@ -451,6 +524,29 @@
     </section>
 
 
+    <!-- CLEAR RESULTS -->
+
+    <section class="panel">
+
+        <h2>
+            DEVELOPMENT CONTROLS
+        </h2>
+
+        <p class="dashboard-description">
+            Clear the locally stored simulation results while testing
+            the scheduler-to-metrics data flow.
+        </p>
+
+        <button
+            id="clearResultsButton"
+            class="button"
+        >
+            CLEAR SAVED RESULTS
+        </button>
+
+    </section>
+
+
     <div class="footnote">
 
         Metrics shown above are based on the current hospital
@@ -465,8 +561,8 @@
 <!-- JAVASCRIPT -->
 
 <script src="../js/common.js"></script>
-
 <script src="../js/data.js"></script>
+<script src="../js/results.js"></script>
 
 
 <script>
@@ -474,17 +570,13 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 
-    // ---------------------------------------
-    // TOTAL NUMBER OF PROCESSES
-    // ---------------------------------------
+    // =======================================
+    // WORKLOAD SUMMARY
+    // =======================================
 
     const totalProcesses =
         hospitalProcesses.length;
 
-
-    // ---------------------------------------
-    // TOTAL CPU BURST
-    // ---------------------------------------
 
     const totalBurst =
         hospitalProcesses.reduce(
@@ -496,10 +588,6 @@ document.addEventListener("DOMContentLoaded", function () {
             0
         );
 
-
-    // ---------------------------------------
-    // QUEUE COUNTS
-    // ---------------------------------------
 
     const emergencyCount =
         hospitalProcesses.filter(
@@ -531,9 +619,9 @@ document.addEventListener("DOMContentLoaded", function () {
         ).length;
 
 
-    // ---------------------------------------
-    // DISPLAY RESULTS
-    // ---------------------------------------
+    // =======================================
+    // DISPLAY WORKLOAD SUMMARY
+    // =======================================
 
     document.getElementById("totalProcesses")
         .textContent = totalProcesses;
@@ -553,6 +641,187 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("backgroundCount")
         .textContent = backgroundCount;
+
+
+    // =======================================
+    // LOAD SAVED SIMULATION RESULTS
+    // =======================================
+
+    const results =
+        loadSimulationResults();
+
+
+    const status =
+        document.getElementById("simulationStatus");
+
+
+    const latestRun =
+        document.getElementById("latestRunSummary");
+
+
+    // =======================================
+    // NO SIMULATION YET
+    // =======================================
+
+    if (!results) {
+
+        status.textContent =
+            "No simulation has been run yet.";
+
+        latestRun.textContent =
+            "No simulation data available.";
+
+    }
+
+
+    // =======================================
+    // SIMULATION RESULTS AVAILABLE
+    // =======================================
+
+    else {
+
+        let statusMessage =
+            "Latest simulation results loaded successfully.";
+
+
+        if (results.generatedAt) {
+
+            const runTime =
+                new Date(results.generatedAt);
+
+
+            statusMessage +=
+                " Last run: " +
+                runTime.toLocaleString();
+
+        }
+
+
+        status.textContent =
+            statusMessage;
+
+
+        // -----------------------------------
+        // LATEST RUN SUMMARY
+        // -----------------------------------
+
+        if (results.processCount !== undefined) {
+
+            latestRun.textContent =
+                results.processCount +
+                " processes evaluated in the latest simulation.";
+
+        }
+
+        else {
+
+            latestRun.textContent =
+                "Simulation results are available.";
+
+        }
+
+
+        // ===================================
+        // UPDATE AMQ METRICS
+        // ===================================
+
+        if (results.metrics) {
+
+
+            if (
+                results.metrics.averageWaiting
+                !== undefined
+            ) {
+
+                document.getElementById("avgWaiting")
+                    .textContent =
+                    Number(
+                        results.metrics.averageWaiting
+                    ).toFixed(2);
+
+            }
+
+
+            if (
+                results.metrics.averageTurnaround
+                !== undefined
+            ) {
+
+                document.getElementById("avgTurnaround")
+                    .textContent =
+                    Number(
+                        results.metrics.averageTurnaround
+                    ).toFixed(2);
+
+            }
+
+
+            if (
+                results.metrics.averageResponse
+                !== undefined
+            ) {
+
+                document.getElementById("avgResponse")
+                    .textContent =
+                    Number(
+                        results.metrics.averageResponse
+                    ).toFixed(2);
+
+            }
+
+
+            if (
+                results.metrics.cpuUtilization
+                !== undefined
+            ) {
+
+                document.getElementById("cpuUtilization")
+                    .textContent =
+                    Number(
+                        results.metrics.cpuUtilization
+                    ).toFixed(1) + "%";
+
+            }
+
+
+            if (
+                results.metrics.emergencyResponse
+                !== undefined
+            ) {
+
+                document.getElementById("emergencyResponse")
+                    .textContent =
+                    Number(
+                        results.metrics.emergencyResponse
+                    ).toFixed(2);
+
+            }
+
+        }
+
+    }
+
+
+    // =======================================
+    // CLEAR SAVED RESULTS
+    // =======================================
+
+    const clearButton =
+        document.getElementById(
+            "clearResultsButton"
+        );
+
+
+    clearButton.addEventListener(
+        "click",
+        function () {
+
+            clearSimulationResults();
+
+            window.location.reload();
+
+        }
+    );
 
 
 });
