@@ -53,7 +53,7 @@ const hospitalProcesses = [
         queue: "Background",
         arrival: 0,
         burst: 14,
-        priority: null
+        priority: 9
     },
     {
         id: "P8",

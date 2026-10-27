@@ -25,3 +25,7 @@ Thumbs.db
 
 # Generated experiment output
 experiment_results.csv
+# SQLite checkpoint store (generated at runtime)
+backend/data/
+*.db
+*.db-journal

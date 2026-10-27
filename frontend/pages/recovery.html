@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkpoint Recovery - Medicore</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/nav.js" defer></script>
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <div id="medicore-nav"></div>
+
+    <div class="page-head">
+        <div>
+            <div class="title">Checkpoint-Based Recovery</div>
+            <div class="subtitle">Persistent scheduler state, failure simulation and resumed execution on the AMQ scheduler</div>
+        </div>
+        <div class="status-pill" id="systemPill">NOT STARTED</div>
+    </div>
+
+    <div class="banner info" role="note">
+        <strong>Simulation notice.</strong>
+        Failures, restarts and checkpoints here model the AMQ scheduler only.
+        Checkpoints are stored in SQLite by the Medicore backend; no real operating-system process,
+        kernel or hardware state is saved or restored.
+    </div>
+
+    <div id="offlineBanner" class="banner error" hidden></div>
+    <div id="stateBanner" class="banner info" aria-live="polite">Loading scheduler state…</div>
+
+    <div class="grid">
+
+        <!-- ================= LEFT: CONTROLS ================= -->
+        <div>
+
+            <div class="panel">
+                <h2>1 · SESSION</h2>
+                <div class="form-grid">
+                    <div class="full">
+                        <label for="fWorkload">Workload</label>
+                        <select id="fWorkload">
+                            <option value="hospital" selected>Hospital showcase (8 processes)</option>
+                            <option value="random">Random (seeded)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="fSeed">Seed (random only)</label>
+                        <input id="fSeed" type="number" value="1" min="0" step="1">
+                    </div>
+                    <div>
+                        <label for="fAuto">Auto-checkpoint every N ticks</label>
+                        <input id="fAuto" type="number" value="0" min="0" max="500" step="1">
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn primary grow" id="btnStart">Start new session</button>
+                </div>
+                <p class="help">0 disables automatic checkpoints. Every session saves an initial checkpoint at t=0.</p>
+            </div>
+
+            <div class="panel">
+                <h2>2 · EXECUTE</h2>
+                <div class="btn-row">
+                    <button class="btn grow" data-step="1" data-needs="live">+1 tick</button>
+                    <button class="btn grow" data-step="5" data-needs="live">+5 ticks</button>
+                    <button class="btn grow" data-step="10" data-needs="live">+10 ticks</button>
+                </div>
+                <div class="btn-row">
+                    <button class="btn grow" id="btnRunAll" data-needs="live">Run to completion</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>3 · CHECKPOINT</h2>
+                <label class="field-label" for="fLabel">Label (optional)</label>
+                <input class="control" id="fLabel" type="text" maxlength="80" placeholder="e.g. before ICU surge">
+                <div class="btn-row">
+                    <button class="btn success grow" id="btnCheckpoint" data-needs="live">Create checkpoint</button>
+                </div>
+                <div class="btn-row">
+                    <button class="btn grow" id="btnInterrupted" data-needs="live"
+                            title="Leaves a half-written checkpoint in storage to show it is detected and skipped on restore">
+                        Simulate interrupted write
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>4 · SIMULATE FAILURE</h2>
+                <label class="field-label" for="fFailPid">Process to fail</label>
+                <select class="control" id="fFailPid" data-needs="live"></select>
+                <label class="field-label" for="fFailRecov" style="margin-top:10px">Make upcoming recovery attempts fail</label>
+                <select class="control" id="fFailRecov" data-needs="live">
+                    <option value="0" selected>None — recovery succeeds</option>
+                    <option value="1">First attempt fails</option>
+                    <option value="2">First 2 attempts fail</option>
+                    <option value="3">All 3 attempts fail (unrecoverable)</option>
+                </select>
+                <div class="btn-row">
+                    <button class="btn danger grow" id="btnFail" data-needs="live">Fail process</button>
+                </div>
+                <div class="btn-row">
+                    <button class="btn danger grow" id="btnCrash" data-needs="live"
+                            title="Discards the in-memory scheduler, like a crash or restart">
+                        Crash / restart scheduler
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>5 · RECOVER</h2>
+                <div class="btn-row">
+                    <button class="btn primary grow" id="btnRestore" data-needs="checkpoints">Restore latest valid checkpoint</button>
+                </div>
+                <div class="btn-row">
+                    <button class="btn success grow" id="btnRecover" data-needs="failed">Recover failed processes</button>
+                </div>
+                <p class="help">
+                    Recovery order: genuine emergency processes first, then other critical services, then the rest.
+                    A recovered critical service gets a temporary boost <em>inside its own queue only</em>;
+                    it can never overtake an emergency process.
+                </p>
+                <hr class="divider">
+                <div class="btn-row">
+                    <button class="btn small danger" id="btnReset">Reset stored data</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= RIGHT: DASHBOARD ================= -->
+        <div>
+
+            <div class="panel">
+                <h2>RECOVERY DASHBOARD</h2>
+
+                <div class="tiles cols-6" id="tilesA">
+                    <div class="tile" id="tileSystem"><div class="label">SYSTEM</div><div class="value" id="vSystem">—</div></div>
+                    <div class="tile"><div class="label">TICK</div><div class="value" id="vTick">—</div></div>
+                    <div class="tile"><div class="label">ACTIVE</div><div class="value" id="vActive">—</div></div>
+                    <div class="tile" id="tileFailed"><div class="label">FAILED</div><div class="value" id="vFailed">—</div></div>
+                    <div class="tile"><div class="label">RECOVERED</div><div class="value" id="vRecovered">—</div><div class="sub" id="vRecoveredSub"></div></div>
+                    <div class="tile"><div class="label">COMPLETED</div><div class="value" id="vCompleted">—</div></div>
+                </div>
+
+                <div class="tiles cols-4" id="tilesB">
+                    <div class="tile"><div class="label">LATEST CHECKPOINT</div><div class="value" id="vCheckpoint">—</div><div class="sub" id="vCheckpointSub"></div></div>
+                    <div class="tile"><div class="label">LAST RESTORE TIME</div><div class="value" id="vRestoreMs">—</div><div class="sub" id="vRestoreSub"></div></div>
+                    <div class="tile"><div class="label">SIMULATED WORK LOST</div><div class="value" id="vLost">—</div><div class="sub" id="vLostSub"></div></div>
+                    <div class="tile"><div class="label">FAILED RECOVERY ATTEMPTS</div><div class="value" id="vAttempts">—</div><div class="sub" id="vAttemptsSub"></div></div>
+                </div>
+
+                <div class="field-label" style="margin-top:6px">QUEUES (normal AMQ assignment · ready order)</div>
+                <div class="queue-lanes" id="lanes"></div>
+            </div>
+
+            <div class="panel">
+                <h2>PROCESS TABLE</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>PID</th><th>PROCESS</th><th>NORMAL QUEUE</th><th>STATE</th><th>PROGRESS</th>
+                                <th>PRIO</th><th>CRITICAL</th><th>ATTEMPTS</th><th>TEMP. RECOVERY PRIORITY</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="procBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>EXECUTION TIMELINE</h2>
+                <div class="legend">
+                    <span><i class="q0"></i>Emergency</span>
+                    <span><i class="q1"></i>Interactive</span>
+                    <span><i class="q2"></i>Background</span>
+                    <span>▲ checkpoint</span>
+                </div>
+                <div class="gantt-wrap" id="gantt"><div class="empty-note">Start a session to see the schedule.</div></div>
+            </div>
+
+            <div class="panel">
+                <h2>CHECKPOINTS (PERSISTED IN SQLITE)</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>ID</th><th>CREATED</th><th>TICK</th><th>TYPE</th><th>DONE / ACTIVE / FAILED</th><th>INTEGRITY</th><th></th></tr>
+                        </thead>
+                        <tbody id="cpBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>RECOVERY LOG</h2>
+                <div class="log-list" id="logList"><div class="skeleton">No events yet.</div></div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>MEDICORE · OPERATING SYSTEMS PROJECT</footer>
+
+</div>
+
+<script src="../js/common.js"></script>
+<script src="../js/recovery.js"></script>
+
+</body>
+</html>

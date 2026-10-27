@@ -441,7 +441,7 @@ function renderTaskList() {
         <div class="info">
 
           <div class="name">
-            ${t.name}
+            ${escapeHtml(t.name)}
 
             <span class="queue-tag ${QCOLOR[t.queue]}">
               ${QUEUE_NAME[t.queue]}
@@ -505,6 +505,18 @@ document
     const burst =
       +document.getElementById('fBurst').value;
 
+    if (
+      !Number.isInteger(arrival) || arrival < 0 ||
+      !Number.isInteger(burst) || burst < 1 ||
+      !Number.isInteger(priority) || priority < 0 || priority > 10
+    ) {
+      showToast(
+        'Check the inputs: arrival must be 0 or more, burst at least 1, priority 0-10 (whole numbers).',
+        'error'
+      );
+      return;
+    }
+
     userTasks.push({
       name,
       queue,
@@ -512,6 +524,8 @@ document
       burst,
       basePriority: priority
     });
+
+    showToast('Added "' + name + '".', 'success', 2000);
 
     document
       .getElementById('fName')
@@ -758,8 +772,9 @@ function startEngine() {
 
   if (userTasks.length === 0) {
 
-    alert(
-      'Add at least one task or load a preset first.'
+    showToast(
+      'Add at least one task or load a preset first.',
+      'error'
     );
 
     return null;
@@ -1069,7 +1084,7 @@ function finalizeRun(e) {
   rows.map(r => `
     <tr>
       <td>${r.pid}</td>
-      <td>${r.name}</td>
+      <td>${escapeHtml(r.name)}</td>
       <td>${r.queue}</td>
       <td>${r.arrival}</td>
       <td>${r.burst}</td>

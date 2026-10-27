@@ -8,55 +8,17 @@
     <title>Dashboard - Medicore</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/nav.js" defer></script>
 </head>
 
 <body>
 
-<div class="app">
+<div class="wrap">
 
-    <header class="topbar">
-
-        <div>
-            <div class="brand">MEDICORE</div>
-            <div class="subtitle">
-                Adaptive Multilevel Queue CPU Scheduler
-            </div>
-        </div>
-
-        <div class="status">
-            ● SIMULATOR READY
-        </div>
-
-    </header>
+    <div id="medicore-nav"></div>
 
 
-    <nav class="main-nav">
-
-        <a href="index.html" data-page>
-            Dashboard
-        </a>
-
-        <a href="pages/scheduler.html" data-page>
-            Scheduler
-        </a>
-
-        <a href="pages/processes.html" data-page>
-            Processes
-        </a>
-
-        <a href="pages/queues.html" data-page>
-            Queues
-        </a>
-
-        <a href="pages/metrics.html" data-page>
-            Metrics
-        </a>
-
-        <a href="pages/experiments.html" data-page>
-            Experiments
-        </a>
-
-    </nav>
+    
 
 
     <section class="panel">
@@ -322,17 +284,45 @@
 
         </p>
 
-        <br>
+        <div class="btn-row">
 
-        <a href="pages/scheduler.html"
-           class="button">
+            <a href="pages/scheduler.html" class="button">
+                OPEN SCHEDULER
+            </a>
 
-            OPEN SCHEDULER
-
-        </a>
+        </div>
 
     </section>
 
+
+
+    <!-- CHECKPOINT RECOVERY -->
+
+    <section class="panel">
+
+        <div class="panel-title">
+            CHECKPOINT-BASED RECOVERY
+        </div>
+
+        <p class="dashboard-description">
+
+            Save scheduler state to persistent storage, simulate a process
+            failure or scheduler restart, then restore the latest valid
+            checkpoint and resume the same AMQ schedule. This is a
+            simulation of recovery inside the scheduler model, not
+            operating-system or hardware recovery.
+
+        </p>
+
+        <div class="btn-row">
+
+            <a href="pages/recovery.html" class="button">
+                OPEN CHECKPOINT RECOVERY
+            </a>
+
+        </div>
+
+    </section>
 
     <footer>
 
